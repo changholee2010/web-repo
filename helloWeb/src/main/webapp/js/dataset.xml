@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <record>
+    <id>1</id>
+	<first_name>Joell</first_name>
+	<email>jchinnock0@globo.com</email>
+  </record>
+  <record>
+    <id>2</id>
+	<first_name>Maxy</first_name>
+	<email>mmeins1@latimes.com</email>
+  </record>
+  <record>
+    <id>3</id>
+	<first_name>Alden</first_name>
+	<email>aharmson2@java.com</email>
+  </record>
+  <record>
+	<id>4</id>
+	<first_name>Babbie</first_name>
+	<email>blisamore3@livejournal.com</email>
+  </record>
+  <record>
+	<id>5</id>
+	<first_name>Josy</first_name>
+	<email>jplacide4@prlog.org</email>
+  </record>
+</dataset>
