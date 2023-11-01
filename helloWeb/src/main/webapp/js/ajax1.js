@@ -12,13 +12,17 @@ friends.push('최길동');
 // 비동기방식.
 setTimeout(function() {
 	friends.push('홍길동');
+	
+	setTimeout(function() {
+		friends.push('김길동');
+		
+		setTimeout(function() {
+			friends.push('최길동');
+		}, 2000);
+	}, 500);
 }, 1000);
-setTimeout(function() {
-	friends.push('김길동');
-}, 500);
-setTimeout(function() {
-	friends.push('최길동');
-}, 2000);
+
+
 
 // 보류.
 let newMember = //
