@@ -3,8 +3,8 @@
  */
 export default {
 	async getStudent(sid, successCallback, errCallback) {
-		let promise = await fetch("../getStudent.do?sid=" + sid)
-		let json = await promise.json();
+		let req = await fetch("../getStudent.do?sid=" + sid)
+		let json = await req.json();
 		try {
 			successCallback(json);
 		} catch (err) {
@@ -12,8 +12,8 @@ export default {
 		}
 	},
 	async listStudent(successCallback, errCallback) {
-		let promise = await fetch('../studentList.do')
-		let json = await promise.json();
+		let req = await fetch('../studentList.do')
+		let json = await req.json();
 		try {
 			successCallback(json);
 		} catch (err) {
@@ -21,8 +21,8 @@ export default {
 		}
 	},
 	async addStudent(param, successCallback, errCallback) {
-		let promise = await fetch('../addStudent.do', param)
-		let json = await promise.json();
+		let req = await fetch('../addStudent.do', param)
+		let json = await req.json();
 		try {
 			successCallback(json);
 		} catch (err) {
@@ -30,8 +30,8 @@ export default {
 		}
 	},
 	async editStudent(param, successCallback, errCallback) {
-		let promise = await fetch('../editStudent.do', param)
-		let json = await promise.json();
+		let req = await fetch('../editStudent.do', param)
+		let json = await req.json();
 		try {
 			successCallback(json);
 		} catch (err) {
@@ -39,8 +39,8 @@ export default {
 		}
 	},
 	async delStudent(sid, successCallback, errCallback) {
-		let promise = await fetch('../delStudent.do', param)
-		let json = await promise.json();
+		let req = await fetch('../delStudent.do?sid', sid)
+		let json = await req.json();
 		try {
 			successCallback(json);
 		} catch (err) {
