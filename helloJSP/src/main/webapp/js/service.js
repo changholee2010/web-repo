@@ -2,11 +2,14 @@
  * service.js
  */
 export default {
-	getStudent(sid, successCallback, errCallback) {
-		fetch("../getStudent.do?sid=" + sid)
-			.then(resolve => resolve.json())
-			.then(successCallback)
-			.catch(errCallback)
+	async getStudent(sid, successCallback, errCallback) {
+		let promise = await fetch("../getStudent.do?sid=" + sid)
+		let json = await promise.json();
+		try {
+			successCallback(json);
+		} catch (err) {
+			errCallback(err);
+		}
 	},
 	async listStudent(successCallback, errCallback) {
 		let promise = await fetch('../studentList.do')
@@ -17,22 +20,31 @@ export default {
 			errCallback(err);
 		}
 	},
-	addStudent(param, successCallback, errCallback) {
-		fetch('../addStudent.do', param)//
-			.then(resolve => resolve.json())
-			.then(successCallback)
-			.catch(errCallback);
+	async addStudent(param, successCallback, errCallback) {
+		let promise = await fetch('../addStudent.do', param)
+		let json = await promise.json();
+		try {
+			successCallback(json);
+		} catch (err) {
+			errCallback(err);
+		}
 	},
-	editStudent(param, successCallback, errCallback) {
-		fetch('../editStudent.do', param)//
-			.then(resolve => resolve.json())
-			.then(successCallback)
-			.catch(errCallback);
+	async editStudent(param, successCallback, errCallback) {
+		let promise = await fetch('../editStudent.do', param)
+		let json = await promise.json();
+		try {
+			successCallback(json);
+		} catch (err) {
+			errCallback(err);
+		}
 	},
-	delStudent(sid, successCallback, errCallback) {
-		fetch('../delStudent.do?sid=' + sid)
-			.then(resolve => resolve.json())
-			.then(successCallback)
-			.catch(errCallback);
+	async delStudent(sid, successCallback, errCallback) {
+		let promise = await fetch('../delStudent.do', param)
+		let json = await promise.json();
+		try {
+			successCallback(json);
+		} catch (err) {
+			errCallback(err);
+		}
 	}
 }
