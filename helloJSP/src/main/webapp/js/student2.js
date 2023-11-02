@@ -1,18 +1,18 @@
 /**
  * js/student.js 
  */
+import svc from './service.js';
 
 // 페이지 로딩되면서 바로 실행.
-fetch('../studentList.do')
-	.then(resolve => resolve.json())
-	.then(result => {
-		console.log(result);
+svc.listStudent(//
+	result => {
 		let tbody = document.querySelector('#list');
 		result.forEach(student => {
 			tbody.append(makeTr(student));
 		})
-	})
-	.catch(err => console.log('error=>', err));
+	},
+	err => console.log('error=>', err))
+
 
 // 등록버튼 이벤트.
 document.querySelector('#addBtn').addEventListener('click', addCallback);
@@ -36,12 +36,13 @@ function addCallback(e) {
 	// get: url패턴. 값의제한.
 	// post: 파라미터 표현X, 값의제한X, content-type지정.
 	//fetch('../addStudent.do?' + param) => get방식.
-	fetch('../addStudent.do', {
-		method: 'post',
-		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-		body: param
-	}).then(resolve => resolve.json())
-		.then(result => {
+	svc.addStudent(//
+		{
+			method: 'post',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: param
+		},//
+		result => {
 			if (result.retCode == 'OK') {
 				alert('성공');
 				let tr = makeTr({ studentId: sid, studentName: sname, studentBirthday: birth })
@@ -49,8 +50,9 @@ function addCallback(e) {
 			} else {
 				alert('실패');
 			}
-		})
-		.catch(err => console.log('error=> ', err));
+		},
+		err => console.log('error=> ', err)
+	)
 
 } // end of addCallback.
 
@@ -62,17 +64,15 @@ function modifyCallback(e) {
 
 	let param = `id=${id}&name=${name}&password=${pass}&birthday=${birth}`;
 
-	fetch('../editStudent.do', {
-		method: 'post',
-		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-		body: param
-	})
-		.then(resolve => resolve.json())
-		.then(result => {
-			console.log(result);
+	svc.editStudent(//
+		{
+			method: 'post',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: param
+		},
+		result => {
 			if (result.retCode == 'OK') {
 				alert('성공');
-				//result.vo.studentId;
 				let targetTr = //
 					document.querySelector('tr[data-sid=' + result.vo.studentId + ']');
 				let newTr = makeTr(result.vo);
@@ -82,8 +82,9 @@ function modifyCallback(e) {
 			} else {
 				alert('실패');
 			}
-		})
-		.catch(err => console.log('error=> ', err));
+		},
+		err => console.log('error=> ', err)
+	)
 } // end of modifyCallback.
 
 // tr생성함수.
@@ -105,18 +106,17 @@ function makeTr(obj) {
 	btn.innerHTML = '삭제';
 	btn.addEventListener('click', function(e) {
 		// ajax호출. -> 서블릿실행.
-		fetch('../delStudent.do?sid=' + obj.studentId)
-			.then(resolve => resolve.json())
-			.then(result => {
-				console.log(result);
+		svc.delStudent(obj.studentId,
+			result => {
 				if (result.retCode == 'OK') {
 					alert('삭제성공');
 					tr.remove();
 				} else {
 					alert('삭제실패');
 				}
-			})
-			.catch(err => console.log('error: ', err));
+			},
+			err => console.log('error: ', err)
+		)
 
 	})
 	td.append(btn);
@@ -147,18 +147,17 @@ function showModal(e) {
 		}
 	}
 
-	fetch("../getStudent.do?sid=" + id)
-		.then(resolve => resolve.json())
-		.then(result => {
+	svc.getStudent(id, //
+		result => {
 			// Get the modal
 			modal.style.display = "block";
-			//let data = { id: "std1", name: "홍길동", pass: "1234", birth: "1999-09-09" }
 
 			modal.querySelector('h2').innerHTML = result.studentName;
 			modal.querySelector('input[name=pass]').value = result.studentPassword;
 			modal.querySelector('input[name=name]').value = result.studentName;
 			modal.querySelector('input[name=birth]').value = result.studentBirthday;
 			modal.querySelector('input[name=sid]').value = result.studentId;
-		})
+		},
+		err => console.log('error=> ', err))
 
 }
