@@ -15,22 +15,23 @@ public class BoardServiceImpl implements BoardService {
 
 	@Override
 	public BoardVO getBoard(int boardNo) {
-		return null;
+		dao.updateCnt(boardNo);
+		return dao.select(boardNo);
 	}
 
 	@Override
 	public boolean addBoard(BoardVO vo) {
-		return false;
+		return dao.insert(vo) == 1;
 	}
 
 	@Override
 	public boolean editBoard(BoardVO vo) {
-		return false;
+		return dao.update(vo) == 1;
 	}
 
 	@Override
-	public BoardVO removeBoard(int boardNo) {
-		return null;
+	public boolean removeBoard(int boardNo) {
+		return dao.delete(boardNo) == 1;
 	}
 
 }

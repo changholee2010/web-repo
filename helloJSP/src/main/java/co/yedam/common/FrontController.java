@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import co.yedam.board.web.AddBoardControl;
+import co.yedam.board.web.BoardFormControl;
+import co.yedam.board.web.BoardListControl;
+import co.yedam.board.web.GetBoardControl;
+
 // url: *.do 
 public class FrontController extends HttpServlet {
 
@@ -18,16 +23,20 @@ public class FrontController extends HttpServlet {
 
 	@Override
 	public void init(ServletConfig config) throws ServletException {
-
+		map.put("/boardList.do", new BoardListControl());
+		map.put("/getBoard.do", new GetBoardControl());
+		// 등록화면.
+		map.put("/boardForm.do", new BoardFormControl());
+		map.put("/addBoard.do", new AddBoardControl());
 	}
 
 	@Override
 	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
-		String uri = req.getRequestURI(); // http://localhost:8080/helloJSP/??.do
+		String uri = req.getRequestURI(); // http://localhost:8080/helloJSP/boardList.do
 		String context = req.getServletContext().getContextPath(); // helloJSP
 		String page = uri.substring(context.length());
-		System.out.println(page);
+		System.out.println(page); //
 
 		Command controller = map.get(page);
 		controller.execute(req, resp);

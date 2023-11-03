@@ -46,7 +46,7 @@ public class BoardDAO {
 				vo.setLastUpdate(rs.getDate("last_update"));
 				vo.setTitle(rs.getString("title"));
 				vo.setViewCnt(rs.getInt("view_cnt"));
-				vo.setWriteDate(rs.getDate("writeDate"));
+				vo.setWriteDate(rs.getDate("write_date"));
 				vo.setWriter(rs.getString("writer"));
 				list.add(vo);
 
@@ -74,7 +74,7 @@ public class BoardDAO {
 				vo.setLastUpdate(rs.getDate("last_update"));
 				vo.setTitle(rs.getString("title"));
 				vo.setViewCnt(rs.getInt("view_cnt"));
-				vo.setWriteDate(rs.getDate("writeDate"));
+				vo.setWriteDate(rs.getDate("write_date"));
 				vo.setWriter(rs.getString("writer"));
 
 				return vo;
@@ -110,7 +110,7 @@ public class BoardDAO {
 
 	public int update(BoardVO vo) {
 		sql = "update board set title=?, content=?, "//
-				+ " image=?, update_date=sysdate"//
+				+ " image=nvl(?, image), last_update=sysdate"//
 				+ " where board_no=?";
 		conn = ds.getConnection();
 		try {
@@ -134,6 +134,25 @@ public class BoardDAO {
 
 	public int delete(int boardNo) {
 		sql = "delete from board where board_no=?";
+		conn = ds.getConnection();
+		try {
+			psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, boardNo);
+
+			int r = psmt.executeUpdate();
+			return r;
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close();
+		}
+		return 0;
+	}
+
+	// 조회수 증가.
+	public int updateCnt(int boardNo) {
+		sql = "update board set view_cnt=view_cnt+1 where board_no=?";
 		conn = ds.getConnection();
 		try {
 			psmt = conn.prepareStatement(sql);
