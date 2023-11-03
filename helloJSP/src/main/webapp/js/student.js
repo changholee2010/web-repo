@@ -1,18 +1,28 @@
 /**
  * js/student.js 
  */
+import svc from './service.js';
 
 // 페이지 로딩되면서 바로 실행.
-fetch('../studentList.do')
-	.then(resolve => resolve.json())
-	.then(result => {
-		console.log(result);
+// 비동기방식코드 -> 순차적 가독성 높이기. async, await.
+// async 함수(
+//	await 처리. (promise객체.)
+//	await 처리. (promise객체.)
+//	await 처리. (promise객체.)
+//)
+
+// 학생목록출력.
+svc.studentList(
+	// 성공후 실행함수.
+	result => {
 		let tbody = document.querySelector('#list');
 		result.forEach(student => {
 			tbody.append(makeTr(student));
 		})
-	})
-	.catch(err => console.log('error=>', err));
+	}
+	// 실패후 실행함수
+	, err => console.log('error=>', err) //
+);
 
 // 등록버튼 이벤트.
 document.querySelector('#addBtn').addEventListener('click', addCallback);
@@ -36,21 +46,32 @@ function addCallback(e) {
 	// get: url패턴. 값의제한.
 	// post: 파라미터 표현X, 값의제한X, content-type지정.
 	//fetch('../addStudent.do?' + param) => get방식.
-	fetch('../addStudent.do', {
-		method: 'post',
-		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-		body: param
-	}).then(resolve => resolve.json())
-		.then(result => {
+	svc.addStudent(
+		// 1) optObj=>
+		{
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: param
+		},
+		// 2) successCallback=>
+		result => {
 			if (result.retCode == 'OK') {
 				alert('성공');
-				let tr = makeTr({ studentId: sid, studentName: sname, studentBirthday: birth })
+				let tr = makeTr({
+					studentId: sid,
+					studentName: sname,
+					studentBirthday: birth
+				})
 				document.querySelector('#list').append(tr);
 			} else {
 				alert('실패');
 			}
-		})
-		.catch(err => console.log('error=> ', err));
+		},
+		// 3) errorCallback=>
+		err => console.log('error=> ', err)
+	);
 
 } // end of addCallback.
 
@@ -62,17 +83,20 @@ function modifyCallback(e) {
 
 	let param = `id=${id}&name=${name}&password=${pass}&birthday=${birth}`;
 
-	fetch('../editStudent.do', {
-		method: 'post',
-		headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-		body: param
-	})
-		.then(resolve => resolve.json())
-		.then(result => {
+	svc.editStudent(
+		// 1) optObj
+		{
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			},
+			body: param
+		},
+		// 2) successCall
+		result => {
 			console.log(result);
 			if (result.retCode == 'OK') {
 				alert('성공');
-				//result.vo.studentId;
 				let targetTr = //
 					document.querySelector('tr[data-sid=' + result.vo.studentId + ']');
 				let newTr = makeTr(result.vo);
@@ -82,8 +106,10 @@ function modifyCallback(e) {
 			} else {
 				alert('실패');
 			}
-		})
-		.catch(err => console.log('error=> ', err));
+		},
+		// 3) errorCall
+		err => console.log('error=> ', err)
+	);
 } // end of modifyCallback.
 
 // tr생성함수.
@@ -105,19 +131,18 @@ function makeTr(obj) {
 	btn.innerHTML = '삭제';
 	btn.addEventListener('click', function(e) {
 		// ajax호출. -> 서블릿실행.
-		fetch('../delStudent.do?sid=' + obj.studentId)
-			.then(resolve => resolve.json())
-			.then(result => {
-				console.log(result);
+		svc.removeStudent(//
+			obj.studentId,
+			result => {
 				if (result.retCode == 'OK') {
 					alert('삭제성공');
 					tr.remove();
 				} else {
 					alert('삭제실패');
 				}
-			})
-			.catch(err => console.log('error: ', err));
-
+			},
+			err => console.log('error: ', err)
+		)
 	})
 	td.append(btn);
 	tr.append(td);
@@ -147,18 +172,19 @@ function showModal(e) {
 		}
 	}
 
-	fetch("../getStudent.do?sid=" + id)
-		.then(resolve => resolve.json())
-		.then(result => {
+	svc.getStudent(// id, successCallback, errorCallback
+		id,
+		result => {
 			// Get the modal
 			modal.style.display = "block";
-			//let data = { id: "std1", name: "홍길동", pass: "1234", birth: "1999-09-09" }
 
 			modal.querySelector('h2').innerHTML = result.studentName;
 			modal.querySelector('input[name=pass]').value = result.studentPassword;
 			modal.querySelector('input[name=name]').value = result.studentName;
 			modal.querySelector('input[name=birth]').value = result.studentBirthday;
 			modal.querySelector('input[name=sid]').value = result.studentId;
-		})
+		},
+		err => console.log('error=> ', err)
+	)
 
 }
