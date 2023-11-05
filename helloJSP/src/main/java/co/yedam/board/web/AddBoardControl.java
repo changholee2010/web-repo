@@ -14,6 +14,7 @@ public class AddBoardControl implements Command {
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) {
+
 		// 제목, 내용, 작성자.
 		String title = req.getParameter("title");
 		String writer = req.getParameter("writer");
