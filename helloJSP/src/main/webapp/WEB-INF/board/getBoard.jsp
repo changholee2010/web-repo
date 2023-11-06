@@ -1,23 +1,17 @@
 <%@page import="co.yedam.board.service.BoardVO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
+<%@include file="../layout/menu.jsp" %>
+<%@include file="../layout/header.jsp" %>
 
-<head>
-	<meta charset="UTF-8">
-	<title>getBoard.jsp</title>
-</head>
-
-<body>
-
-	<%
+<%
 	BoardVO vo = (BoardVO) request.getAttribute("bno");
-	%>
-	<h3>상세화면(조회화면)</h3>
-	<form action="modifyForm.do" name="myFrm">
-		<input type="hidden" name="bno" value="<%=vo.getBoardNo()%>">
-		<table border="1">
+%>
+<h3>상세화면(조회화면)</h3>
+<form action="modifyForm.do" name="myFrm">
+	<input type="hidden" name="bno" value="<%=vo.getBoardNo()%>">
+	<table class="table">
+		<tbody>
 			<tr>
 				<th>글번호</th>
 				<td><%=vo.getBoardNo()%></td>
@@ -30,12 +24,16 @@
 			</tr>
 			<tr>
 				<td colspan="4">
-					<textarea rows="5" cols="40"><%=vo.getContent()%></textarea>
+					<textarea class="form-control" readonly rows="5" cols="40"><%=vo.getContent()%></textarea>
 				</td>
 			</tr>
 			<tr>
 				<th>이미지</th>
-				<td colspan="3"><img width="80px" src="images/<%=vo.getImage()%>"></td>
+				<td colspan="3">
+				<% if (vo.getImage() != null) {%>
+				<img width="80px" src="images/<%=vo.getImage()%>">
+				<% } %>
+				</td>
 			</tr>
 			<tr>
 				<th>작성자</th>
@@ -45,20 +43,24 @@
 			</tr>
 			<tr>
 				<td colspan="2" align="center">
-					<input type="submit" value="수정">
-					<input type="button" value="삭제">
+					<% if(logId != null && logId.equals(vo.getWriter())) { %>
+					<input class="btn btn-primary" type="submit" value="수정">
+					<input class="btn btn-warning" type="button" value="삭제">
+					<% } else { %>
+					<input class="btn btn-primary" disabled type="submit" value="수정">
+					<input class="btn btn-warning" disabled type="button" value="삭제">
+					<% } %>
 				</td>
 			</tr>
-		</table>
-	</form>
-	<p><a href="boardList.do">목록으로</a></p>
-	<script>
-		document.querySelector('input[type=button]') //
-			.addEventListener('click', function (e) {
-				document.forms.myFrm.action = 'removeForm.do';
-				document.forms.myFrm.submit();
-			});
-	</script>
-</body>
+		</tbody>
+	</table>
+</form>
 
-</html>
+<script>
+	document.querySelector('input[type=button]') //
+		.addEventListener('click', function (e) {
+			document.forms.myFrm.action = 'removeForm.do';
+			document.forms.myFrm.submit();
+		});
+</script>
+<%@include file="../layout/footer.jsp" %>

@@ -29,7 +29,14 @@ public class FrontController extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		// 메인페이지.
 		map.put("/main.do", new MainControl());
+		// 로그인.
+		map.put("/loginForm.do", new LoginFormControl());
+		map.put("/login.do", new LoginControl());
+		map.put("/logout.do", new LogoutControl());
 		
+		// 회원목록.
+		map.put("/memberList.do", new MemberListControl());
+
 		map.put("/boardList.do", new BoardListControl());
 		map.put("/getBoard.do", new GetBoardControl());
 		// 등록화면.
