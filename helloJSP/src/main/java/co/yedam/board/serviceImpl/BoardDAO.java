@@ -88,14 +88,15 @@ public class BoardDAO {
 	}
 
 	public int insert(BoardVO vo) {
-		sql = "insert into board(board_no, title, content, writer) "//
-				+ "values(seq_board.nextval, ?, ?, ?)";
+		sql = "insert into board(board_no, title, content, writer, image) "//
+				+ "values(seq_board.nextval, ?, ?, ?, ?)";
 		conn = ds.getConnection();
 		try {
 			psmt = conn.prepareStatement(sql);
 			psmt.setString(1, vo.getTitle());
 			psmt.setString(2, vo.getContent());
 			psmt.setString(3, vo.getWriter());
+			psmt.setString(4, vo.getImage());
 
 			int r = psmt.executeUpdate();
 			return r;
